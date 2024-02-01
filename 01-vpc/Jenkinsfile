@@ -23,6 +23,14 @@ pipeline {
                 """
             }
         }
+        stage('plan') {
+            steps {
+                sh """
+                    cd 01-vpc
+                    terraform plan
+                """
+            }
+        }
         stage('Deploy') {
             input {
                 message "Should we continue?"
@@ -30,22 +38,19 @@ pipeline {
                 // submitter "alice,bob"
                 // parameters {
                 //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-                // }
+                //  }
+            }
             steps {
                 sh """
                     cd 01-vpc
+                    terraform apply -auto-approve
 
                 """
-                
             }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+        }    
     }    
-}
+
+
     // after build execution post is used check the status of execution 
     post { 
         always { 
